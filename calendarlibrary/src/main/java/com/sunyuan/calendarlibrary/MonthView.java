@@ -1,13 +1,11 @@
 package com.sunyuan.calendarlibrary;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -68,7 +66,8 @@ public class MonthView extends View {
     public static final String TOP_TEXT_COLOR = "TOP_TEXT_COLOR";
     public static final String TEXT_COLOR = "TEXT_COLOR";
     public static final String SELECT_TEXT_COLOR = "SELECT_TEXT_COLOR";
-    public static final String SELECT_BG_DRAWABLE = "SELECT_BG_DRAWABLE";
+    public static final String SELECT_BG_DRAWABLE_FIRST = "SELECT_BG_DRAWABLE_FIRST";
+    public static final String SELECT_BG_DRAWABLE_LAST = "SELECT_BG_DRAWABLE_LAST";
     public static final String SELECT_RANGE_BG_DRAWABLE = "SELECT_RANGE_BG_DRAWABLE";
     public static final String WEEKEND_TEXT_COLOR = "WEEKEND_TEXT_COLOR";
     public static final String DIS_TEXT_COLOR = "DIS_TEXT_COLOR";
@@ -147,7 +146,8 @@ public class MonthView extends View {
      */
     private int selectMaxRange;
     private int curToFirstDayDiff;
-    private Drawable selectBgDrawable;
+    private Drawable selectBgDrawableFirst;
+    private Drawable selectBgDrawableLast;
     private Drawable selectRangeDrawable;
 
     /**
@@ -168,8 +168,11 @@ public class MonthView extends View {
         super(context, attrs, defStyleAttr);
         textColor = (int) ATTRS.get(TEXT_COLOR);
         selectTextColor = (int) ATTRS.get(SELECT_TEXT_COLOR);
-        if (ATTRS.get(SELECT_BG_DRAWABLE) != null) {
-            selectBgDrawable = (Drawable) ATTRS.get(SELECT_BG_DRAWABLE);
+        if (ATTRS.get(SELECT_BG_DRAWABLE_FIRST) != null) {
+            selectBgDrawableFirst = (Drawable) ATTRS.get(SELECT_BG_DRAWABLE_FIRST);
+        }
+        if (ATTRS.get(SELECT_BG_DRAWABLE_LAST) != null) {
+            selectBgDrawableLast = (Drawable) ATTRS.get(SELECT_BG_DRAWABLE_LAST);
         }
         if (ATTRS.get(SELECT_RANGE_BG_DRAWABLE) != null) {
             selectRangeDrawable = (Drawable) ATTRS.get(SELECT_RANGE_BG_DRAWABLE);
@@ -328,10 +331,16 @@ public class MonthView extends View {
             int dayOffset = findDayOffset(year, month, day);
             int offset = dayOffset * dayWidth + paddingLeft;
             dayRang.set(offset, top, offset + dayWidth, top + rowHeight);
-            if (isFirstDay(day) || isLastDay(day)) {
-                if (selectBgDrawable != null) {
-                    selectBgDrawable.setBounds(dayRang.left, dayRang.top, dayRang.right, dayRang.bottom);
-                    selectBgDrawable.draw(canvas);
+            if (isFirstDay(day)) {
+                if (selectBgDrawableFirst != null) {
+                    selectBgDrawableFirst.setBounds(dayRang.left, dayRang.top, dayRang.right, dayRang.bottom);
+                    selectBgDrawableFirst.draw(canvas);
+                }
+            }
+            if (isLastDay(day)) {
+                if (selectBgDrawableLast != null) {
+                    selectBgDrawableLast.setBounds(dayRang.left, dayRang.top, dayRang.right, dayRang.bottom);
+                    selectBgDrawableLast.draw(canvas);
                 }
             }
             dayText = String.format(Locale.CANADA, "%d", day);

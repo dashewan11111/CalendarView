@@ -29,7 +29,8 @@
         <attr name="cl_firstSelectDayText" format="string" />
         <attr name="cl_lastSelectDayText" format="string" />
         <attr name="cl_rowHeight" format="dimension" />
-        <attr name="cl_selectBgDrawable" format="reference" />
+        <attr name="cl_selectBgDrawableFirst" format="reference" />
+        <attr name="cl_selectBgDrawableLast" format="reference" />
         <attr name="cl_selectRangeBgDrawable" format="reference" />
     </declare-styleable>
 
